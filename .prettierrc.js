@@ -1,7 +1,8 @@
 module.exports = {
-  arrowParens: 'avoid',
-  bracketSameLine: true,
-  bracketSpacing: false,
-  singleQuote: true,
-  trailingComma: 'all',
-};
+  "semi": false,              // Không dấu chấm phẩy
+  "singleQuote": true,        // Dùng dấu nháy đơn
+  "trailingComma": "none",    // Không thêm dấu phẩy cuối
+  "tabWidth": 2,
+  "printWidth": 100
+}
+
