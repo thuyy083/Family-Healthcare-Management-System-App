@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Avatar, Card, Text, ActivityIndicator, Appbar, Button } from 'react-native-paper'
 import { getUserProfile } from '../services/userService'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation,  useFocusEffect } from '@react-navigation/native'
 
 const ContactInfo = () => {
     const [profile, setProfile] = useState(null)
@@ -16,6 +16,22 @@ const ContactInfo = () => {
         return `${day}/${month}/${year}`
     }
 
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+            try {
+                setLoading(true)
+                const data = await getUserProfile()
+                setProfile(data)
+            } catch (err) {
+                console.error('Error fetching user profile:', err)
+            } finally {
+                setLoading(false)
+            }
+            }
+            fetchData()
+        }, [])
+    )
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -39,8 +55,9 @@ const ContactInfo = () => {
         return <Text>Không thể tải thông tin liên lạc</Text>
     }
 
-    const avatarUri = `http://192.168.1.3:7060/images/khachhang/${profile.hinhAnh}`
+    const avatarUri = `http://10.0.2.2:7060/images/khachhang/${profile.hinhAnh}`
 
+    console.log("avatar: " ,avatarUri)
     return (
         <>
             {/* Header giống hình */}

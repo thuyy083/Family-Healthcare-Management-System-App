@@ -11,9 +11,13 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { launchImageLibrary } from 'react-native-image-picker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { getUserProfile, updateUserProfile } from '../services/userService'
 import { useNavigation } from '@react-navigation/native'
+import { ToastAndroid } from 'react-native'
 import { Appbar } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../store/userSlice'
 
 const EditContact = () => {
   const [profile, setProfile] = useState(null)
@@ -26,7 +30,7 @@ const EditContact = () => {
       const data = await getUserProfile()
       setProfile(data)
       if (data.hinhAnh) {
-        setAvatar(`http://192.168.1.3:7060/images/khachhang/${data.hinhAnh}`)
+        setAvatar(`http://10.0.2.2:7060/images/khachhang/${data.hinhAnh}`)
       }
     }
     fetchData()
@@ -40,7 +44,7 @@ const EditContact = () => {
     }
     }
 
-
+  const dispatch = useDispatch()
   const handleUpdate = async () => {
     const formData = new FormData()
     for (let key in profile) {
@@ -55,9 +59,15 @@ const EditContact = () => {
     }
     try {
       await updateUserProfile(formData)
+      const updatedProfile = await getUserProfile()
+      dispatch(updateUser(updatedProfile))
       navigation.goBack()
     } catch (e) {
-      console.log('Lỗi cập nhật:', e)
+      const message =
+        e.response?.data ||
+        e.response?.data?.message ||
+        'Cập nhật thất bại!'
+      ToastAndroid.show(message, ToastAndroid.LONG)
     }
   }
 
@@ -69,7 +79,12 @@ const EditContact = () => {
         <Appbar.BackAction onPress={() => navigation.goBack()} color="#fff" />
         <Appbar.Content title="Chỉnh sửa thông tin" titleStyle={{ color: '#fff' }} />
       </Appbar.Header>
-    <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        extraScrollHeight={25}
+        enableOnAndroid={true}
+        keyboardShouldPersistTaps="handled"
+      >
       <Text style={styles.title}>Chỉnh sửa thông tin</Text>
 
       <TouchableOpacity onPress={handleChooseImage}>
@@ -94,28 +109,31 @@ const EditContact = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Số điện thoại"
-        value={profile.soDienThoai}
-        onChangeText={text => setProfile({ ...profile, soDienThoai: text })}
-      />
-      <TextInput
-        style={styles.input}
         placeholder="Ngày sinh"
         value={profile.ngaySinh?.split('T')[0]}
         onFocus={() => setShowDatePicker(true)}
       />
-      {showDatePicker && (
-        <DateTimePicker
-          mode="date"
-          value={new Date(profile.ngaySinh)}
-          onChange={(event, selectedDate) => {
-            setShowDatePicker(false)
-            if (selectedDate) {
-              setProfile({ ...profile, ngaySinh: selectedDate.toISOString() })
-            }
-          }}
-        />
-      )}
+{showDatePicker && (
+  <DateTimePicker
+    mode="date"
+    value={profile.ngaySinh ? new Date(profile.ngaySinh) : new Date()}
+    maximumDate={new Date()} // ✅ Không cho chọn sau hôm nay
+    display="default"
+    onChange={(event, selectedDate) => {
+  setShowDatePicker(false)
+  if (selectedDate) {
+    // ✅ Cộng thêm 1 ngày
+    const adjustedDate = new Date(selectedDate)
+    adjustedDate.setDate(adjustedDate.getDate() + 1)
+
+    // ✅ Lưu dạng ISO (sau khi cộng ngày)
+    const iso = adjustedDate.toISOString()
+    setProfile({ ...profile, ngaySinh: iso })
+  }
+}}
+
+  />
+)}
 
       <TextInput
         style={styles.input}
@@ -137,7 +155,7 @@ const EditContact = () => {
       />
 
       <Button title="Lưu thay đổi" onPress={handleUpdate} />
-    </ScrollView>
+    </KeyboardAwareScrollView>
     </>
   )
 }

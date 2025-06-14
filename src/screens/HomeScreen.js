@@ -39,7 +39,7 @@ export default function HomeScreen() {
             <Text style={styles.userName}>{user?.hoTen || 'Khách'}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               <Image
-                source={{ uri: `http://192.168.1.3:7060/images/khachhang/${user?.hinhAnh}` }}
+                source={{ uri: `http://10.0.2.2:7060/images/khachhang/${user?.hinhAnh}` }}
                 style={styles.avatar}
               />
             </TouchableOpacity>

@@ -31,3 +31,26 @@ export const isLoggedIn = async () => {
   }
   return false
 }
+
+export const sendOtpToResetPassword = async (soDienThoai) => {
+  console.log('SDT: ', soDienThoai)
+  const response = await axios.post(
+    'http://10.0.2.2:7060/api/AccountApi/SendOtpToResetPassword',
+    { soDienThoai }
+  )
+  return response.data
+}
+
+export const resetPasswordWithOtp = async ({ soDienThoai, otp, newPassword }) => {
+  console.log('Gửi dữ liệu:', { soDienThoai, otp, newPassword }) // debug
+  const response = await axios.post(
+    'http://10.0.2.2:7060/api/AccountApi/ResetPasswordWithOtp',
+    {
+      soDienThoai,
+      otp,
+      newPassword
+    }
+  )
+  console.log('response: ', response)
+  return response.data
+}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import { getUserProfile } from '../services/userService'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -16,6 +17,24 @@ const ProfileScreen = () => {
     const [loading, setLoading] = useState(true)
     const dispatch = useDispatch()
     const navigation = useNavigation()
+
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+            try {
+                setLoading(true)
+                const data = await getUserProfile()
+                setProfile(data)
+            } catch (err) {
+                console.error('Error fetching user profile:', err)
+            } finally {
+                setLoading(false)
+            }
+            }
+            fetchData()
+        }, [])
+    )
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,7 +103,7 @@ const ProfileScreen = () => {
             screen: 'FamilyInfo'
         }
     ]
-    const avatarUri = `http://192.168.1.3:7060/images/khachhang/${profile.hinhAnh}`
+    const avatarUri = `http://10.0.2.2:7060/images/khachhang/${profile.hinhAnh}`
 
     return (
         <Layout>
