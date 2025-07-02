@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import { getUserProfile } from '../services/userService'
+import { getUserProfile } from '../../services/userService'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Layout from '../components/Layout'
+import Layout from '../../components/Layout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import Images from '../assets/images/index'
+import Images from '../../assets/images/index'
 import { useDispatch } from 'react-redux'
-import { logout } from '../store/userSlice'
+import { logout } from '../../store/userSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import { logout as logoutService } from '../services/authService'
+import { logout as logoutService } from '../../services/authService'
 
 const ProfileScreen = () => {
     const [profile, setProfile] = useState(null)

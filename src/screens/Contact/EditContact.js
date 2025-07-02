@@ -12,12 +12,12 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { launchImageLibrary } from 'react-native-image-picker'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { getUserProfile, updateUserProfile } from '../services/userService'
+import { getUserProfile, updateUserProfile } from '../../services/userService'
 import { useNavigation } from '@react-navigation/native'
 import { ToastAndroid } from 'react-native'
 import { Appbar } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { updateUser } from '../store/userSlice'
+import { updateUser } from '../../store/userSlice'
 
 const EditContact = () => {
   const [profile, setProfile] = useState(null)
@@ -89,7 +89,7 @@ const EditContact = () => {
 
       <TouchableOpacity onPress={handleChooseImage}>
         <Image
-          source={avatar ? { uri: avatar } : require('../assets/images/Logo.png')}
+          source={avatar ? { uri: avatar } : require('../../assets/images/Logo.png')}
           style={styles.avatar}
         />
         <Text style={styles.chooseText}>Chọn hình ảnh</Text>

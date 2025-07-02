@@ -1,14 +1,14 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const BASE_URL = 'http://10.0.2.2:7060/api/AccountApi'
 //const API_URL = 'http://localhost:7060/api/AccountApi/Login'
-const API_URL = 'http://10.0.2.2:7060/api/AccountApi/Login'
 
 export const login = async (soDienThoai, matKhau) => {
-  console.log('Gọi API:', API_URL)
+  console.log('Gọi API:', BASE_URL)
 
   try {
-    const response = await axios.post(API_URL, { soDienThoai, matKhau })
+    const response = await axios.post(`${BASE_URL}/Login`, { soDienThoai, matKhau })
     await AsyncStorage.setItem('token', response.data.token)
     //console.log('Dữ liệu trả về:', response.data)
     return response.data
@@ -35,7 +35,7 @@ export const isLoggedIn = async () => {
 export const sendOtpToResetPassword = async (soDienThoai) => {
   console.log('SDT: ', soDienThoai)
   const response = await axios.post(
-    'http://10.0.2.2:7060/api/AccountApi/SendOtpToResetPassword',
+    `${BASE_URL}/SendOtpToResetPassword`,
     { soDienThoai }
   )
   return response.data
@@ -44,7 +44,7 @@ export const sendOtpToResetPassword = async (soDienThoai) => {
 export const resetPasswordWithOtp = async ({ soDienThoai, otp, newPassword }) => {
   console.log('Gửi dữ liệu:', { soDienThoai, otp, newPassword }) // debug
   const response = await axios.post(
-    'http://10.0.2.2:7060/api/AccountApi/ResetPasswordWithOtp',
+    `${BASE_URL}/ResetPasswordWithOtp`,
     {
       soDienThoai,
       otp,

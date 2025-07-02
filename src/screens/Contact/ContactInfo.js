@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Avatar, Card, Text, ActivityIndicator, Appbar, Button } from 'react-native-paper'
-import { getUserProfile } from '../services/userService'
+import { getUserProfile } from '../../services/userService'
 import { useNavigation,  useFocusEffect } from '@react-navigation/native'
 
 const ContactInfo = () => {

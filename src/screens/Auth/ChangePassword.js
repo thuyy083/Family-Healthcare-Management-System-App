@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ToastAndroid
 } from 'react-native'
-import { sendOtpToResetPassword } from '../services/authService'
+import { sendOtpToResetPassword } from '../../services/authService'
 import { Appbar } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'

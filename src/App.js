@@ -6,16 +6,24 @@ import { Provider } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import LoginScreen from './screens/LoginScreen'
-import HomeScreen from './screens/HomeScreen'
-import ProfileScreen from './screens/ProfileScreen'
-import ContactInfo from './screens/ContactInfo'
-import EditContact from './screens/EditContact'
-import ChangePassword from './screens/ChangePassword'
-import ResetPassword from './screens/ResetPassword'
+import LoginScreen from './screens/Auth/LoginScreen'
+import HomeScreen from './screens/Home/HomeScreen'
+import ProfileScreen from './screens/Auth/ProfileScreen'
+import ContactInfo from './screens/Contact/ContactInfo'
+import EditContact from './screens/Contact/EditContact'
+import ChangePassword from './screens/Auth/ChangePassword'
+import ResetPassword from './screens/Auth/ResetPassword'
+import DoctorListScreen from './screens/Doctor/DoctorList'
+import DoctorDetailScreen from './screens/Doctor/DoctorDetail'
+import MedicalServiceListScreen from './screens/MedicalService/MedicalServiceList'
+import MedicalServiceDetailScreen from './screens/MedicalService/MedicalServiceDetail'
+import BookServiceListScreen from './screens/BookService/BookServiceList'
+import BookServiceDetailScreen from './screens/BookService/BookServiceDetailScreen'
+import BookServiceForm from './screens/BookService/BookServiceForm'
 import store from './store/store'
 import { isLoggedIn } from './services/authService'
 import { setUser } from './store/userSlice'
+import { Omega } from 'lucide-react-native'
 
 const Stack = createNativeStackNavigator()
 
@@ -73,6 +81,13 @@ const MainApp = () => {
             <Stack.Screen name='EditContact' component={EditContact} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="ResetPassword" component={ResetPassword} />
+            <Stack.Screen name='DoctorList' component={DoctorListScreen} />
+            <Stack.Screen name='DoctorDetail' component={DoctorDetailScreen} />
+            <Stack.Screen name='MedicalServiceList' component={MedicalServiceListScreen} />
+            <Stack.Screen name='MedicalServiceDetail' component={MedicalServiceDetailScreen} />
+            <Stack.Screen name='BookServiceList' component={BookServiceListScreen} />
+            <Stack.Screen name='BookServiceDetail' component={BookServiceDetailScreen} />
+            <Stack.Screen name='BookServiceForm' component={BookServiceForm} />
 
           </Stack.Navigator>
         </NavigationContainer>

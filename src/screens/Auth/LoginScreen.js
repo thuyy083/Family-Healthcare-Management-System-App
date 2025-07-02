@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native'
 import Toast from 'react-native-toast-message'
-import { login } from '../services/authService'
+import { login } from '../../services/authService'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../store/userSlice'
+import { setUser } from '../../store/userSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import Images from '../assets/images/index'
+import Images from '../../assets/images/index'
 
 
 const LoginScreen = ({ navigation }) => {

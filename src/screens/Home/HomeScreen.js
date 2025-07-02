@@ -10,21 +10,21 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { useSelector } from 'react-redux'
-import Images from '../assets/images/index'
+import Images from '../../assets/images/index'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FlatList } from 'react-native'
-import Layout from '../components/Layout'
+import Layout from '../../components/Layout'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
   const user = useSelector(state => state.user.currentUser)
   console.log(user)
   const menuItems = [
-    { label: 'Đặt dịch vụ y tế', screen: 'Booking', icon: 'medical-services' },
-    { label: 'Dịch vụ đã đặt', screen: 'BookedServices', icon: 'event-note' },
-    { label: 'Thông tin bác sĩ', screen: 'DoctorInfo', icon: 'person-search' },
+    { label: 'Đặt dịch vụ y tế', screen: 'BookServiceForm', icon: 'medical-services' },
+    { label: 'Dịch vụ đã đặt', screen: 'BookServiceList', icon: 'event-note' },
+    { label: 'Thông tin bác sĩ', screen: 'DoctorList', icon: 'person-search' },
     { label: 'Thông tin nhân viên y tế', screen: 'StaffInfo', icon: 'groups' },
-    { label: 'Dịch vụ y tế', screen: 'AllServices', icon: 'local-hospital' },
+    { label: 'Dịch vụ y tế', screen: 'MedicalServiceList', icon: 'local-hospital' },
     { label: 'Trợ giúp', screen: 'Help', icon: 'help-outline' }
   ]
 

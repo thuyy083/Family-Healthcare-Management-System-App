@@ -8,7 +8,7 @@ import {
   ToastAndroid
 } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { resetPasswordWithOtp } from '../services/authService'
+import { resetPasswordWithOtp } from '../../services/authService'
 import { Appbar } from 'react-native-paper'
 
 const ResetPassword = () => {
