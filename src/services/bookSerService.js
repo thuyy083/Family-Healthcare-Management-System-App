@@ -39,12 +39,20 @@ export const getBookServiceById = async(maDon) => {
 
 export const bookService = async (id, formData) => {
   const token = await AsyncStorage.getItem('token')
-  console.log("formData: ", formData)
-  const res = await axios.post(`${API_BASE}/${id}/book`, formData, {
+  console.log("formData:", formData)
+
+  const res = await axios.post(`${BASE_URL}/${id}/book`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'application/json'
     }
   })
+
   return res.data
+}
+
+export const getStaff = async () => {
+    const url = `${BASE_URL}/staff`
+    const response = await axios.get(url)
+    return response.data
 }

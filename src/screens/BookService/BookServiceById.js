@@ -15,27 +15,14 @@ import { Appbar, Button as PaperButton } from 'react-native-paper'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { bookService } from '../../services/bookSerService'
 import { getStaff } from '../../services/bookSerService'
-import { getAllMedicalService } from '../../services/medicalService'
 // import { ToastAndroid } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const BookServiceByIdScreen = () => {
     const navigation = useNavigation()
-    const [dichVuList, setDichVuList] = useState([])
-    const [selectedDichVu, setSelectedDichVu] = useState(null)
-
-    useEffect(() => {
-        const fetchDichVu = async () => {
-            try {
-                const res = await getAllMedicalService()
-                setDichVuList(res)
-            } catch (err) {
-                console.log('Lỗi tải dịch vụ:', err)
-            }
-        }
-        fetchDichVu()
-    }, [])
+    const route = useRoute()
+    const { id } = route.params
 
     const [ngayBD, setNgayBD] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false)
@@ -64,14 +51,6 @@ const BookServiceByIdScreen = () => {
 
 
     const handleSubmit = async () => {
-        if (!selectedDichVu) {
-            Toast.show({
-                type: 'error',
-                text1: 'Thiếu thông tin',
-                text2: 'Vui lòng chọn dịch vụ',
-            })
-            return
-        }
         if (!sdt.trim()) {
             Toast.show({
                 type: 'error',
@@ -119,7 +98,7 @@ const BookServiceByIdScreen = () => {
 
         try {
             const formData = {
-                NgayBD: ngayBD.toLocaleString('sv-SE').replace(' ', 'T'),
+                NgayBD: ngayBD.toISOString(),
                 SoLuong: parseInt(soLuong),
                 SDT: sdt,
                 DiaChi: diaChi,
@@ -128,7 +107,7 @@ const BookServiceByIdScreen = () => {
                 MoTaBenh: moTaBenh,
             }
 
-            const res = await bookService(selectedDichVu.maDV, formData)
+            const res = await bookService(id, formData)
 
             Toast.show({
                 type: 'success',
@@ -162,65 +141,10 @@ const BookServiceByIdScreen = () => {
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
                 contentContainerStyle={styles.container}
-                extraScrollHeight={150}
+                extraScrollHeight={100}
                 enableOnAndroid={true}
                 keyboardShouldPersistTaps="handled"
             >
-                <Text style={styles.label}>Chọn dịch vụ</Text>
-                <Menu
-                    visible={menuVisible}
-                    onDismiss={() => setMenuVisible(false)}
-                    anchor={
-                        <TouchableOpacity onPress={() => setMenuVisible(true)} style={styles.input}>
-                            <Text style={{ color: selectedDichVu ? '#000' : '#aaa' }}>
-                                {selectedDichVu ? selectedDichVu.tenDV : 'Chọn dịch vụ'}
-                            </Text>
-                        </TouchableOpacity>
-                    }
-                >
-                    {dichVuList.map((dv) => (
-                        <Menu.Item
-                            key={dv.maDV}
-                            onPress={() => {
-                                setSelectedDichVu(dv)
-                                setMenuVisible(false)
-                            }}
-                            title={dv.tenDV}
-                        />
-                    ))}
-                </Menu>
-
-                {selectedDichVu && (
-                    <View style={{ marginVertical: 8, padding: 10, backgroundColor: '#eef', borderRadius: 8 }}>
-                        <Text>Đơn vị: {selectedDichVu.dvt}</Text>
-
-                        {selectedDichVu.khuyenMai ? (
-                            <Text>
-                                Đơn giá:{' '}
-                                <Text style={{ textDecorationLine: 'line-through', color: 'gray' }}>
-                                    {selectedDichVu.donGia.toLocaleString()} đ
-                                </Text>{' '}
-                                →{' '}
-                                <Text style={{ fontWeight: 'bold', color: '#d32f2f' }}>
-                                    {Math.round(
-                                        selectedDichVu.donGia * (1 - selectedDichVu.khuyenMai.giamGia / 100)
-                                    ).toLocaleString()}{' '}
-                                    đ
-                                </Text>
-                            </Text>
-                        ) : (
-                            <Text>Đơn giá: {selectedDichVu.donGia.toLocaleString()} đ</Text>
-                        )}
-
-                        {selectedDichVu.khuyenMai && (
-                            <Text>
-                                KM: {selectedDichVu.khuyenMai.tenKM} (-
-                                {selectedDichVu.khuyenMai.giamGia}%)
-                            </Text>
-                        )}
-                    </View>
-                )}
-
                 <Text style={styles.label}>Ngày bắt đầu</Text>
                 <View style={{ flexDirection: 'row', gap: 10 }}>
                     <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.datePicker}>

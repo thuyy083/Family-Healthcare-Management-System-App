@@ -5,12 +5,12 @@ import {
   FlatList,
   StyleSheet,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity
 } from 'react-native'
 import { Appbar } from 'react-native-paper'
 import { getAllMedicalService } from '../../services/medicalService'
 import { useNavigation } from '@react-navigation/native'
-import { TouchableOpacity } from 'react-native'
 import Layout from '../../components/Layout'
 
 const MedicalServiceListScreen = () => {
@@ -35,14 +35,34 @@ const MedicalServiceListScreen = () => {
     }
   }
 
-  const renderService = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('MedicalServiceDetail', { maDV: item.maDV })}>
+  const renderService = ({ item }) => {
+    const { khuyenMai, donGia, dvt } = item
+    const hasDiscount = khuyenMai !== null
+    const discountedPrice = hasDiscount
+      ? donGia * (1 - khuyenMai.giamGia / 100)
+      : donGia
+
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('MedicalServiceDetail', { maDV: item.maDV })}>
         <View style={styles.card}>
-        <Text style={styles.name}>{item.tenDV}</Text>
-        <Text style={styles.detail}>Đơn vị: {item.dvt}</Text>
+          <Text style={styles.name}>{item.tenDV}</Text>
+          <Text style={styles.detail}>Đơn vị: {item.dvt}</Text>
+
+          <View style={styles.priceRow}>
+            {hasDiscount && (
+              <>
+                <Text style={styles.oldPrice}>{donGia.toLocaleString()}đ</Text>
+                <Text style={styles.discountPercent}>-{khuyenMai.giamGia}%</Text>
+              </>
+            )}
+            <Text style={styles.finalPrice}>
+              {discountedPrice.toLocaleString()}đ / {dvt}
+            </Text>
+          </View>
         </View>
-    </TouchableOpacity>
-  )
+      </TouchableOpacity>
+    )
+  }
 
   return (
     <Layout>
@@ -106,6 +126,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginTop: 4
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    flexWrap: 'wrap'
+  },
+  oldPrice: {
+    textDecorationLine: 'line-through',
+    color: '#888',
+    fontSize: 14,
+    marginRight: 6
+  },
+  discountPercent: {
+    color: '#d32f2f',
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginRight: 6
+  },
+  finalPrice: {
+    color: '#0077aa',
+    fontWeight: 'bold',
+    fontSize: 16
   }
 })
 

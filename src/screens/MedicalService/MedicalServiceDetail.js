@@ -52,75 +52,141 @@ const MedicalServiceDetailScreen = () => {
         <Appbar.Content title="Chi tiết dịch vụ" titleStyle={{ color: '#fff' }} />
       </Appbar.Header>
 
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>{service.tenDV}</Text>
-        <Text style={styles.text}>Đơn vị: {service.dvt}</Text>
-        <Text style={styles.text}>Giá gần nhất: {service.donGiaGanNhat.toLocaleString()} đ</Text>
-        <Text style={styles.text}>Mô tả: {service.moTa || 'Không có mô tả'}</Text>
+<ScrollView style={styles.container}>
+  <View style={styles.card}>
+    <Text style={styles.title}>{service.tenDV}</Text>
 
-        {km && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Khuyến mãi</Text>
-            <Text style={styles.text}>Tên: {km.tenKM}</Text>
-            <Text style={styles.text}>Giảm giá: {km.giamGia}%</Text>
-            <Text style={styles.text}>Từ: {moment(km.ngayBD).format('DD/MM/YYYY')} đến {moment(km.ngayKT).format('DD/MM/YYYY')}</Text>
-            <Text style={styles.text}>Mô tả: {km.mota}</Text>
-          </View>
-        )}
+    <View style={styles.priceRow}>
+      {km ? (
+        <>
+          <Text style={[styles.text, styles.oldPrice]}>
+            {service.donGiaGanNhat.toLocaleString()}đ
+          </Text>
+          <Text style={styles.salePrice}>
+            {(service.donGiaGanNhat * (1 - km.giamGia / 100)).toLocaleString()}đ / {service.dvt}
+          </Text>
+        </>
+      ) : (
+        <Text style={styles.text}>
+          {service.donGiaGanNhat.toLocaleString()}đ / {service.dvt}
+        </Text>
+      )}
+    </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Đánh giá</Text>
-          {comments.length === 0 ? (
-            <Text style={styles.text}>Chưa có đánh giá nào.</Text>
-          ) : (
-            comments.map((c) => (
-              <View key={c.maBL} style={styles.comment}>
-                <Text style={styles.commentName}>{c.tenKH}</Text>
-                <Text style={styles.text}>
-                  {moment(c.thoiGian).format('HH:mm DD/MM/YYYY')} - {c.danhGia}⭐
-                </Text>
-                <Text style={styles.text}>{c.noiDung}</Text>
-              </View>
-            ))
-          )}
+    <Text style={styles.text}>Mô tả: {service.moTa || 'Không có mô tả'}</Text>
+  </View>
+
+  {km && (
+    <View style={styles.card}>
+      <Text style={styles.sectionTitle}>🎁 Khuyến mãi</Text>
+      <Text style={styles.text}>Tên: {km.tenKM}</Text>
+      <Text style={styles.text}>Giảm giá: {km.giamGia}%</Text>
+      <Text style={styles.text}>Từ: {moment(km.ngayBD).format('DD/MM/YYYY')} đến {moment(km.ngayKT).format('DD/MM/YYYY')}</Text>
+      <Text style={styles.text}>Mô tả: {km.mota}</Text>
+    </View>
+  )}
+
+  <View style={styles.card}>
+    <Text style={styles.sectionTitle}>💬 Đánh giá</Text>
+    {comments.length === 0 ? (
+      <Text style={styles.text}>Chưa có đánh giá nào.</Text>
+    ) : (
+      comments.map((c) => (
+        <View key={c.maBL} style={styles.comment}>
+          <Text style={styles.commentName}>{c.tenKH}</Text>
+          <Text style={styles.text}>
+            {moment(c.thoiGian).format('HH:mm DD/MM/YYYY')} - {c.danhGia}⭐
+          </Text>
+          <Text style={styles.text}>{c.noiDung}</Text>
         </View>
-      </ScrollView>
+      ))
+    )}
+  </View>
+
+  <View style={{ padding: 16 }}>
+    <Text
+      onPress={() => navigation.navigate('BookServiceById', { id: service.maDV })}
+      style={styles.button}
+    >
+      Đặt dịch vụ
+    </Text>
+  </View>
+</ScrollView>
+
     </>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#e5f4fb'
+  },
+  card: {
+    backgroundColor: '#fff',
+    margin: 12,
     padding: 16,
-    backgroundColor: '#f0f9ff'
+    borderRadius: 10,
+    elevation: 3
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#0077aa',
     marginBottom: 10
   },
   text: {
     fontSize: 16,
-    marginBottom: 6
-  },
-  section: {
-    marginTop: 20
+    marginBottom: 6,
+    color: '#333'
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#0077aa'
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     marginBottom: 8
   },
+  oldPrice: {
+    textDecorationLine: 'line-through',
+    color: '#888',
+    fontSize: 16
+  },
+  salePrice: {
+    fontSize: 18,
+    color: '#d90429',
+    fontWeight: 'bold',
+    marginLeft: 10
+  },
   comment: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fa',
     padding: 10,
     marginBottom: 10,
     borderRadius: 6,
-    elevation: 1
+    borderLeftWidth: 4,
+    borderLeftColor: '#0077aa'
   },
   commentName: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: '#444'
+  },
+  button: {
+    backgroundColor: '#0077aa',
+    color: '#fff',
+    paddingVertical: 14,
+    textAlign: 'center',
+    borderRadius: 8,
+    fontSize: 17,
+    fontWeight: 'bold',
+    shadowColor: '#000',
+    elevation: 3
   }
 })
+
 
 export default MedicalServiceDetailScreen

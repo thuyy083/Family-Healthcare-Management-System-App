@@ -76,8 +76,11 @@ const BookServiceDetailScreen = ({ route, navigation }) => {
     return (
         <Layout>
             <Appbar.Header style={{ backgroundColor: '#0077aa' }}>
-                <Appbar.BackAction onPress={navigation.goBack} color="#fff" />
-                <Appbar.Content title="Chi tiết dịch vụ" titleStyle={{ color: '#fff' }} />
+            <Appbar.BackAction
+                onPress={() => navigation.navigate('BookServiceList')}
+                color="#fff"
+            />
+            <Appbar.Content title="Chi tiết đơn đặt dịch vụ" titleStyle={{ color: '#fff' }} />
             </Appbar.Header>
 
             <ScrollView contentContainerStyle={styles.container}>
@@ -85,7 +88,7 @@ const BookServiceDetailScreen = ({ route, navigation }) => {
                     <View style={styles.headerBar} />
                     <Text style={styles.title}>{detail.tenDV}</Text>
 
-                    <Row icon="calendar" label="Thời gian" value={moment(detail.ngayBD).format('DD/MM/YYYY')} />
+                    <Row icon="calendar" label="Thời gian" value={moment(detail.ngayBD).format('HH:mm DD/MM/YYYY')} />
                     <Row icon="counter" label="Số lượng" value={`${detail.soLuong} ${detail.dvt}`} />
                     <Row icon="currency-usd" label="Đơn giá" value={`${detail.tongTien.toLocaleString()} đ`} />
 

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Provider } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { Provider as ReduxProvider, useDispatch } from 'react-redux'
+import { Provider as PaperProvider } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import Toast from 'react-native-toast-message'
 
 import LoginScreen from './screens/Auth/LoginScreen'
 import HomeScreen from './screens/Home/HomeScreen'
@@ -20,6 +21,7 @@ import MedicalServiceDetailScreen from './screens/MedicalService/MedicalServiceD
 import BookServiceListScreen from './screens/BookService/BookServiceList'
 import BookServiceDetailScreen from './screens/BookService/BookServiceDetailScreen'
 import BookServiceForm from './screens/BookService/BookServiceForm'
+import BookServiceByIdScreen from './screens/BookService/BookServiceById'
 import store from './store/store'
 import { isLoggedIn } from './services/authService'
 import { setUser } from './store/userSlice'
@@ -46,62 +48,62 @@ const MainApp = () => {
     init()
   }, [])
 
-  // useEffect(() => {
-  //   const checkToken = async () => {
-  //     const token = await AsyncStorage.getItem('token')
-  //     if (!token) {
-  //       setInitialRoute('Login')
-  //     } else {
-  //       try {
-  //         // Gọi một API để test token (ví dụ: /User/me)
-  //         await axios.get('/User/me', {
-  //           headers: { Authorization: `Bearer ${token}` }
-  //         })
-  //         setInitialRoute('Home')
-  //       } catch (err) {
-  //         setInitialRoute('Login') // nếu token sai/hết hạn
-  //       }
-  //     }
-  //   }
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token')
+      if (!token) {
+        setInitialRoute('Login')
+      } else {
+        try {
+          // Gọi một API để test token
+          await axios.get('/User/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          setInitialRoute('Home')
+        } catch (err) {
+          setInitialRoute('Login') // nếu token sai/hết hạn
+        }
+      }
+    }
 
-  //   checkToken()
-  // }, [])
+    checkToken()
+  }, [])
 
   if (!initialRoute) return null
 
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name='Profile' component={ProfileScreen} />
-            <Stack.Screen name='ContactInfo' component={ContactInfo} />
-            <Stack.Screen name='EditContact' component={EditContact} />
-            <Stack.Screen name="ChangePassword" component={ChangePassword} />
-            <Stack.Screen name="ResetPassword" component={ResetPassword} />
-            <Stack.Screen name='DoctorList' component={DoctorListScreen} />
-            <Stack.Screen name='DoctorDetail' component={DoctorDetailScreen} />
-            <Stack.Screen name='MedicalServiceList' component={MedicalServiceListScreen} />
-            <Stack.Screen name='MedicalServiceDetail' component={MedicalServiceDetailScreen} />
-            <Stack.Screen name='BookServiceList' component={BookServiceListScreen} />
-            <Stack.Screen name='BookServiceDetail' component={BookServiceDetailScreen} />
-            <Stack.Screen name='BookServiceForm' component={BookServiceForm} />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name='Profile' component={ProfileScreen} />
+        <Stack.Screen name='ContactInfo' component={ContactInfo} />
+        <Stack.Screen name='EditContact' component={EditContact} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name='DoctorList' component={DoctorListScreen} />
+        <Stack.Screen name='DoctorDetail' component={DoctorDetailScreen} />
+        <Stack.Screen name='MedicalServiceList' component={MedicalServiceListScreen} />
+        <Stack.Screen name='MedicalServiceDetail' component={MedicalServiceDetailScreen} />
+        <Stack.Screen name='BookServiceList' component={BookServiceListScreen} />
+        <Stack.Screen name='BookServiceDetail' component={BookServiceDetailScreen} />
+        <Stack.Screen name='BookServiceForm' component={BookServiceForm} />
+        <Stack.Screen name='BookServiceById' component={BookServiceByIdScreen} />
 
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </Provider>
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <SafeAreaProvider>
-        <MainApp />
-      </SafeAreaProvider>
-    </Provider>
+    <ReduxProvider store={store}>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <MainApp />
+          <Toast />
+        </SafeAreaProvider>
+      </PaperProvider>
+    </ReduxProvider>
   )
 }

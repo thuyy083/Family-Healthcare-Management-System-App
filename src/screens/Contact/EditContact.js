@@ -36,13 +36,13 @@ const EditContact = () => {
     fetchData()
   }, [])
 
-    const handleChooseImage = async () => {
+  const handleChooseImage = async () => {
     const result = await launchImageLibrary({ mediaType: 'photo', quality: 1 })
 
     if (result.assets && result.assets.length > 0) {
-        setAvatar(result.assets[0].uri)
+      setAvatar(result.assets[0].uri)
     }
-    }
+  }
 
   const dispatch = useDispatch()
   const handleUpdate = async () => {
@@ -75,7 +75,7 @@ const EditContact = () => {
 
   return (
     <>
-     <Appbar.Header style={{ backgroundColor: '#0077aa' }}>
+      <Appbar.Header style={{ backgroundColor: '#0077aa' }}>
         <Appbar.BackAction onPress={() => navigation.goBack()} color="#fff" />
         <Appbar.Content title="Chỉnh sửa thông tin" titleStyle={{ color: '#fff' }} />
       </Appbar.Header>
@@ -85,77 +85,76 @@ const EditContact = () => {
         enableOnAndroid={true}
         keyboardShouldPersistTaps="handled"
       >
-      <Text style={styles.title}>Chỉnh sửa thông tin</Text>
+        <Text style={styles.title}>Chỉnh sửa thông tin</Text>
 
-      <TouchableOpacity onPress={handleChooseImage}>
-        <Image
-          source={avatar ? { uri: avatar } : require('../../assets/images/Logo.png')}
-          style={styles.avatar}
+        <TouchableOpacity onPress={handleChooseImage}>
+          <Image
+            source={avatar ? { uri: avatar } : require('../../assets/images/Logo.png')}
+            style={styles.avatar}
+          />
+          <Text style={styles.chooseText}>Chọn hình ảnh</Text>
+        </TouchableOpacity>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Họ tên"
+          value={profile.hoTen}
+          onChangeText={text => setProfile({ ...profile, hoTen: text })}
         />
-        <Text style={styles.chooseText}>Chọn hình ảnh</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={profile.diaChiEmail}
+          onChangeText={text => setProfile({ ...profile, diaChiEmail: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Ngày sinh"
+          value={profile.ngaySinh?.split('T')[0]}
+          onFocus={() => setShowDatePicker(true)}
+        />
+        {showDatePicker && (
+          <DateTimePicker
+            mode="date"
+            value={profile.ngaySinh ? new Date(profile.ngaySinh) : new Date()}
+            maximumDate={new Date()}
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowDatePicker(false)
+              if (selectedDate) {
+                const adjustedDate = new Date(selectedDate)
+                adjustedDate.setDate(adjustedDate.getDate() + 1)
 
-      <TextInput
-        style={styles.input}
-        placeholder="Họ tên"
-        value={profile.hoTen}
-        onChangeText={text => setProfile({ ...profile, hoTen: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={profile.diaChiEmail}
-        onChangeText={text => setProfile({ ...profile, diaChiEmail: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Ngày sinh"
-        value={profile.ngaySinh?.split('T')[0]}
-        onFocus={() => setShowDatePicker(true)}
-      />
-{showDatePicker && (
-  <DateTimePicker
-    mode="date"
-    value={profile.ngaySinh ? new Date(profile.ngaySinh) : new Date()}
-    maximumDate={new Date()} // ✅ Không cho chọn sau hôm nay
-    display="default"
-    onChange={(event, selectedDate) => {
-  setShowDatePicker(false)
-  if (selectedDate) {
-    // ✅ Cộng thêm 1 ngày
-    const adjustedDate = new Date(selectedDate)
-    adjustedDate.setDate(adjustedDate.getDate() + 1)
+                //lưu dạng ISO (sau khi cộng ngày)
+                const iso = adjustedDate.toISOString()
+                setProfile({ ...profile, ngaySinh: iso })
+              }
+            }}
 
-    // ✅ Lưu dạng ISO (sau khi cộng ngày)
-    const iso = adjustedDate.toISOString()
-    setProfile({ ...profile, ngaySinh: iso })
-  }
-}}
+          />
+        )}
 
-  />
-)}
+        <TextInput
+          style={styles.input}
+          placeholder="Địa chỉ"
+          value={profile.diaChi}
+          onChangeText={text => setProfile({ ...profile, diaChi: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Người liên hệ khẩn cấp"
+          value={profile.tenNguoiLienHeKhanCap}
+          onChangeText={text => setProfile({ ...profile, tenNguoiLienHeKhanCap: text })}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="SĐT khẩn cấp"
+          value={profile.sdtNguoiLienHeKhanCap}
+          onChangeText={text => setProfile({ ...profile, sdtNguoiLienHeKhanCap: text })}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Địa chỉ"
-        value={profile.diaChi}
-        onChangeText={text => setProfile({ ...profile, diaChi: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Người liên hệ khẩn cấp"
-        value={profile.tenNguoiLienHeKhanCap}
-        onChangeText={text => setProfile({ ...profile, tenNguoiLienHeKhanCap: text })}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="SĐT khẩn cấp"
-        value={profile.sdtNguoiLienHeKhanCap}
-        onChangeText={text => setProfile({ ...profile, sdtNguoiLienHeKhanCap: text })}
-      />
-
-      <Button title="Lưu thay đổi" onPress={handleUpdate} />
-    </KeyboardAwareScrollView>
+        <Button title="Lưu thay đổi" onPress={handleUpdate} />
+      </KeyboardAwareScrollView>
     </>
   )
 }
