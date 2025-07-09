@@ -25,7 +25,7 @@ export default function HomeScreen() {
     { label: 'Thông tin bác sĩ', screen: 'DoctorList', icon: 'person-search' },
     { label: 'Thông tin nhân viên y tế', screen: 'StaffInfo', icon: 'groups' },
     { label: 'Dịch vụ y tế', screen: 'MedicalServiceList', icon: 'local-hospital' },
-    { label: 'Trợ giúp', screen: 'Help', icon: 'help-outline' }
+    { label: 'Trợ giúp', screen: 'ChatBot', icon: 'help-outline' }
   ]
 
 

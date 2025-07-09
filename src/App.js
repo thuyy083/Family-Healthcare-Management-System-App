@@ -22,10 +22,13 @@ import BookServiceListScreen from './screens/BookService/BookServiceList'
 import BookServiceDetailScreen from './screens/BookService/BookServiceDetailScreen'
 import BookServiceForm from './screens/BookService/BookServiceForm'
 import BookServiceByIdScreen from './screens/BookService/BookServiceById'
+import ChatBotScreen from './screens/ChatBot/ChatBotScreen'
+import MedicalRecordListScreen from './screens/MedicalRecord/MedicalRecordList'
 import store from './store/store'
 import { isLoggedIn } from './services/authService'
 import { setUser } from './store/userSlice'
 import { Omega } from 'lucide-react-native'
+
 
 const Stack = createNativeStackNavigator()
 
@@ -48,26 +51,26 @@ const MainApp = () => {
     init()
   }, [])
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem('token')
-      if (!token) {
-        setInitialRoute('Login')
-      } else {
-        try {
-          // Gọi một API để test token
-          await axios.get('/User/me', {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-          setInitialRoute('Home')
-        } catch (err) {
-          setInitialRoute('Login') // nếu token sai/hết hạn
-        }
-      }
-    }
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     const token = await AsyncStorage.getItem('token')
+  //     if (!token) {
+  //       setInitialRoute('Login')
+  //     } else {
+  //       try {
+  //         // Gọi một API để test token
+  //         await axios.get('/User/me', {
+  //           headers: { Authorization: `Bearer ${token}` }
+  //         })
+  //         setInitialRoute('Home')
+  //       } catch (err) {
+  //         setInitialRoute('Login') // nếu token sai/hết hạn
+  //       }
+  //     }
+  //   }
 
-    checkToken()
-  }, [])
+  //   checkToken()
+  // }, [])
 
   if (!initialRoute) return null
 
@@ -89,6 +92,8 @@ const MainApp = () => {
         <Stack.Screen name='BookServiceDetail' component={BookServiceDetailScreen} />
         <Stack.Screen name='BookServiceForm' component={BookServiceForm} />
         <Stack.Screen name='BookServiceById' component={BookServiceByIdScreen} />
+        <Stack.Screen name='ChatBot' component={ChatBotScreen} />
+        <Stack.Screen name='MedicalRecord' component={MedicalRecordListScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

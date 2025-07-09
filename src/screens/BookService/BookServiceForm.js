@@ -151,8 +151,6 @@ const BookServiceByIdScreen = () => {
         }
     }
 
-
-
     return (
         <>
             <Appbar.Header style={{ backgroundColor: '#0077aa' }}>

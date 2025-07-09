@@ -85,7 +85,7 @@ const ProfileScreen = () => {
         {
             label: 'Hồ sơ y tế',
             icon: 'menu-book',
-            screen: 'PersonalInfo'
+            screen: 'MedicalRecord'
         },
         {
             label: 'Thông tin cá nhân',
